@@ -32,6 +32,7 @@ class ChangeAccountProviderPresenter(
         val remoteConfig by elonConfigRepository.config.collectAsState()
         val dynamicAccountProviderList = remember(remoteConfig) {
             remoteConfig.homeservers
+                .sortedByDescending { it.url == remoteConfig.defaultHomeserver }
                 .map { homeserver ->
                     AccountProvider(
                         url = homeserver.url,

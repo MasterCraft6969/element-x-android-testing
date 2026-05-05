@@ -57,6 +57,7 @@ fun aTimelineState(
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
     displayFloatingDateBadge: Boolean = false,
+    focusedEventHighlightColorArgb: Int = 0xFFA8D8FF.toInt(),
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -77,6 +78,7 @@ fun aTimelineState(
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
         displayFloatingDateBadge = displayFloatingDateBadge,
+        focusedEventHighlightColorArgb = focusedEventHighlightColorArgb,
         eventSink = eventSink,
     )
 }

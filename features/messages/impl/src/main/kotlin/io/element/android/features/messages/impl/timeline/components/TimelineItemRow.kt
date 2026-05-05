@@ -19,13 +19,13 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
@@ -38,7 +38,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -60,6 +59,7 @@ internal fun TimelineItemRow(
     isLastOutgoingMessage: Boolean,
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
+    focusedEventHighlightColorArgb: Int = 0xFFA8D8FF.toInt(),
     displayThreadSummaries: Boolean,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -96,7 +96,7 @@ internal fun TimelineItemRow(
         } else {
             2.dp
         }
-        Modifier.focusedEvent(focusedEventOffset)
+        Modifier.focusedEvent(focusedEventOffset, Color(focusedEventHighlightColorArgb).copy(alpha = 0.15f))
     } else {
         Modifier
     }
@@ -196,6 +196,7 @@ internal fun TimelineItemRow(
                     renderReadReceipts = renderReadReceipts,
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
+                    focusedEventHighlightColorArgb = focusedEventHighlightColorArgb,
                     displayThreadSummaries = displayThreadSummaries,
                     onClick = onContentClick,
                     onLongClick = onLongClick,
@@ -218,14 +219,17 @@ internal fun TimelineItemRow(
 @Composable
 private fun Modifier.focusedEvent(
     focusedEventOffset: Dp,
+    highlightColor: Color,
 ): Modifier {
-    val highlightedLineColor = ElementTheme.colors.borderAccentSubtle
-    val gradientColors = gradientSubtleColors()
+    val highlightedLineColor = highlightColor.copy(alpha = 0.5f)
     val verticalOffset = focusedEventOffset.toPx()
     val verticalRatio = 0.7f
     return drawWithCache {
         val brush = Brush.verticalGradient(
-            colors = gradientColors,
+            colors = listOf(
+                highlightColor,
+                highlightColor.copy(alpha = 0f),
+            ),
             endY = size.height * verticalRatio,
         )
         onDrawBehind {
@@ -251,6 +255,6 @@ internal fun FocusedEventPreview() = ElementPreview {
             .padding(16.dp)
             .fillMaxWidth()
             .height(160.dp)
-            .focusedEvent(0.dp),
+            .focusedEvent(0.dp, Color(0xFFA8D8FF).copy(alpha = 0.15f)),
     )
 }

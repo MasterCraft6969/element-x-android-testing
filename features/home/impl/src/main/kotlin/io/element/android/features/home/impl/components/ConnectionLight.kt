@@ -82,16 +82,19 @@ fun ConnectionLight(
 
     Canvas(
         modifier = modifier
-            .size(16.dp)
+            .size(40.dp)
             .scale(animatedBaseScale * effectivePulse)
             .alpha(animatedAlpha),
     ) {
         val radius = size.minDimension / 2f
+        val glowColor = primaryColor.copy(alpha = primaryColor.alpha.coerceAtMost(0.6f))
+        val secondaryGlowColor = (if (gradientEnabled) secondaryColor else primaryColor)
+            .copy(alpha = 0.24f)
         drawCircle(
             brush = Brush.radialGradient(
                 colors = listOf(
-                    primaryColor.copy(alpha = 0.95f),
-                    (if (gradientEnabled) secondaryColor else primaryColor).copy(alpha = 0.45f),
+                    glowColor,
+                    secondaryGlowColor,
                     primaryColor.copy(alpha = 0f),
                 ),
                 center = Offset(size.width / 2f, size.height / 2f),

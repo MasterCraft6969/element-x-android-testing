@@ -61,6 +61,7 @@ class ChooseAccountProviderPresenter(
 
         val dynamicAccountProviderList = remember(remoteConfig) {
             remoteConfig.homeservers
+                .sortedByDescending { it.url == remoteConfig.defaultHomeserver }
                 .map { homeserver ->
                     AccountProvider(
                         url = homeserver.url,

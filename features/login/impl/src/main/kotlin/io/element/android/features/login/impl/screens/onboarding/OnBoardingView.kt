@@ -18,9 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.BiasAlignment
@@ -35,7 +32,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginModeView
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
@@ -269,12 +265,6 @@ private fun OnBoardingButtons(
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
 ) {
-    val isLoading by remember(state.loginMode) {
-        derivedStateOf {
-            state.loginMode is AsyncData.Loading
-        }
-    }
-
     ButtonColumnMolecule {
         val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
             R.string.screen_onboarding_sign_in_manually
@@ -289,29 +279,15 @@ private fun OnBoardingButtons(
                 modifier = Modifier.fillMaxWidth()
             )
         }
-        val defaultAccountProvider = state.defaultAccountProvider
-        if (defaultAccountProvider == null) {
-            Button(
-                text = stringResource(id = signInButtonStringRes),
-                onClick = {
-                    onSignIn(state.mustChooseAccountProvider)
-                },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .testTag(TestTags.onBoardingSignIn)
-            )
-        } else {
-            Button(
-                text = stringResource(id = R.string.screen_onboarding_sign_in_to, defaultAccountProvider),
-                showProgress = isLoading,
-                onClick = {
-                    state.eventSink(OnBoardingEvents.OnSignIn(defaultAccountProvider))
-                },
-                enabled = state.submitEnabled || isLoading,
-                modifier = Modifier
-                    .fillMaxWidth()
-            )
-        }
+        Button(
+            text = stringResource(id = signInButtonStringRes),
+            onClick = {
+                onSignIn(state.mustChooseAccountProvider)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .testTag(TestTags.onBoardingSignIn)
+        )
         if (state.canCreateAccount) {
             TextButton(
                 text = stringResource(id = R.string.screen_onboarding_sign_up),

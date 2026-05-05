@@ -35,6 +35,7 @@ data class TimelineState(
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val displayThreadSummaries: Boolean,
     val displayFloatingDateBadge: Boolean,
+    val focusedEventHighlightColorArgb: Int,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

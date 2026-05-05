@@ -10,9 +10,7 @@ package io.element.android.features.home.impl.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -123,20 +121,19 @@ fun HomeTopBar(
                     }
                     HomeNavigationBarItem.Spaces -> stringResource(selectedNavigationItem.labelRes)
                 }
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        modifier = Modifier.semantics { heading() },
-                        style = ElementTheme.typography.aliasScreenTitle,
-                        text = displayTitle,
-                    )
+                Box(contentAlignment = Alignment.CenterStart) {
                     ConnectionLight(
                         syncState = syncState,
                         primaryColor = Color(connectionLightPrimaryColorArgb),
                         secondaryColor = Color(connectionLightSecondaryColorArgb),
                         gradientEnabled = connectionLightGradientEnabled,
+                    )
+                    Text(
                         modifier = Modifier
                             .padding(start = 8.dp)
-                            .size(16.dp),
+                            .semantics { heading() },
+                        style = ElementTheme.typography.aliasScreenTitle,
+                        text = displayTitle,
                     )
                 }
             },

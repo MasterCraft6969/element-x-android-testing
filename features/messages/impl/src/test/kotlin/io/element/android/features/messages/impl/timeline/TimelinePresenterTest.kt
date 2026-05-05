@@ -59,6 +59,7 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -1022,6 +1023,7 @@ class TimelinePresenterTest {
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,
+            appPreferencesStore = InMemoryAppPreferencesStore(),
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room, timeline),
