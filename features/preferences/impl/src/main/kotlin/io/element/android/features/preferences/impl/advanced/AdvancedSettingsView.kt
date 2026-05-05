@@ -269,7 +269,7 @@ private fun ConnectionLightSettingsSection(
             RgbSliders(color = secondaryColor, onColorChange = onSecondaryColorChange)
         }
         Button(
-            text = stringResource(id = CommonStrings.action_apply),
+            text = stringResource(id = CommonStrings.action_save),
             onClick = onApply,
             modifier = Modifier
                 .fillMaxWidth()
