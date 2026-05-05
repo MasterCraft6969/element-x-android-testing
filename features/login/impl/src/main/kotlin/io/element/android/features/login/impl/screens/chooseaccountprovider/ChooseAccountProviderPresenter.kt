@@ -65,7 +65,7 @@ class ChooseAccountProviderPresenter(
                 .map { homeserver ->
                     AccountProvider(
                         url = homeserver.url,
-                        title = homeserver.name,
+                        title = if (homeserver.url == "https://electonet.xyz") "ElectoNet" else homeserver.name,
                         subtitle = homeserver.description,
                         isPublic = false,
                         isMatrixOrg = false,

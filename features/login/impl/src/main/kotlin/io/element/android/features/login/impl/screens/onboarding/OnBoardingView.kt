@@ -280,20 +280,10 @@ private fun OnBoardingButtons(
             )
         }
         Button(
-            text = if (state.defaultAccountProvider == null) {
-                stringResource(id = signInButtonStringRes)
-            } else {
-                stringResource(id = R.string.screen_onboarding_sign_in_to, state.defaultAccountProvider)
-            },
-            showProgress = state.submitEnabled.not() && state.defaultAccountProvider != null,
+            text = stringResource(id = signInButtonStringRes),
             onClick = {
-                if (state.defaultAccountProvider == null) {
-                    onSignIn(state.mustChooseAccountProvider)
-                } else {
-                    state.eventSink(OnBoardingEvents.OnSignIn(state.defaultAccountProvider))
-                }
+                onSignIn(state.mustChooseAccountProvider)
             },
-            enabled = state.submitEnabled || state.defaultAccountProvider == null,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.onBoardingSignIn)

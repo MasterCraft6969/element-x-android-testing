@@ -89,7 +89,7 @@ class ElonConfigRepository(
         val defaultConfig = ElonConfigModel(
             homeservers = listOf(
                 ElonHomeserverModel(
-                    name = "Elyon Main",
+                    name = "ElectoNet",
                     url = "https://electonet.xyz",
                     description = null,
                 )

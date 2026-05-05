@@ -8,6 +8,13 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
@@ -101,9 +108,38 @@ fun HomeTopBar(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
+        val targetGlowAlpha = when (syncState) {
+            SyncState.Idle -> 1f
+            SyncState.Running -> 1f
+            SyncState.Error,
+            SyncState.Terminated,
+            SyncState.Offline -> 0f
+        }
+        val animatedGlowAlpha by animateFloatAsState(
+            targetValue = targetGlowAlpha,
+            animationSpec = tween(durationMillis = 1200, easing = LinearEasing),
+            label = "connection_glow_alpha",
+        )
+        val pulseTransition = rememberInfiniteTransition(label = "connection_glow_pulse")
+        val pulseAlpha by pulseTransition.animateFloat(
+            initialValue = 0.72f,
+            targetValue = 1.14f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(durationMillis = 3000, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse,
+            ),
+            label = "connection_glow_pulse_alpha",
+        )
+        val effectiveGlowAlpha = when (syncState) {
+            SyncState.Idle -> animatedGlowAlpha * pulseAlpha
+            SyncState.Running -> animatedGlowAlpha * (1f + (pulseAlpha - 1f) * 0.35f)
+            SyncState.Error,
+            SyncState.Terminated,
+            SyncState.Offline -> animatedGlowAlpha
+        }
         val connectionGlowColors = listOf(
-            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.18f),
-            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.10f),
+            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.18f * effectiveGlowAlpha),
+            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.10f * effectiveGlowAlpha),
             Color(connectionLightPrimaryColorArgb).copy(alpha = 0.0f),
         )
         TopAppBar(
