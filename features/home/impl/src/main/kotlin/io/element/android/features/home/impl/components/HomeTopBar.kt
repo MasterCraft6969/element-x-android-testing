@@ -129,9 +129,7 @@ fun HomeTopBar(
                         gradientEnabled = connectionLightGradientEnabled,
                     )
                     Text(
-                        modifier = Modifier
-                            .padding(start = 8.dp)
-                            .semantics { heading() },
+                        modifier = Modifier.semantics { heading() },
                         style = ElementTheme.typography.aliasScreenTitle,
                         text = displayTitle,
                     )

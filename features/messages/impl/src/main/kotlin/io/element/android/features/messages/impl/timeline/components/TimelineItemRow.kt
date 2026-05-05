@@ -221,7 +221,7 @@ private fun Modifier.focusedEvent(
     focusedEventOffset: Dp,
     highlightColor: Color,
 ): Modifier {
-    val highlightedLineColor = highlightColor.copy(alpha = 0.5f)
+    val highlightedLineColor = highlightColor
     val verticalOffset = focusedEventOffset.toPx()
     val verticalRatio = 0.7f
     return drawWithCache {
