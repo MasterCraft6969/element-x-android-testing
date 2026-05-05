@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_advanced_settings_connection_light_title">Connection Light</string>
+    <string name="screen_advanced_settings_connection_light_primary_color">Primary color</string>
+    <string name="screen_advanced_settings_connection_light_secondary_color">Secondary color</string>
+    <string name="screen_advanced_settings_connection_light_enable_gradient">Enable gradient</string>
+    <string name="screen_advanced_settings_connection_light_color_soft_white">Soft White</string>
+    <string name="screen_advanced_settings_connection_light_color_ice_blue">Ice Blue</string>
+    <string name="screen_advanced_settings_connection_light_color_mint">Mint</string>
+    <string name="screen_advanced_settings_connection_light_color_amber">Amber</string>
+    <string name="screen_advanced_settings_connection_light_color_lavender">Lavender</string>
+    <string name="screen_advanced_settings_connection_light_color_rose">Rose</string>
+</resources>
