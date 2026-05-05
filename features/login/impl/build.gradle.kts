@@ -77,6 +77,9 @@ dependencies {
     implementation(libs.androidx.browser)
     implementation(libs.androidx.webkit)
     implementation(libs.serialization.json)
+    implementation(libs.androidx.datastore.preferences)
+    implementation(platform(libs.network.retrofit.bom))
+    implementation(libs.network.retrofit)
     api(projects.features.login.api)
 
     testCommonDependencies(libs, true)
