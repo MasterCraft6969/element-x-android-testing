@@ -33,7 +33,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -101,10 +100,16 @@ fun HomeTopBar(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
+        val connectionGlowColors = listOf(
+            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.18f),
+            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.10f),
+            Color(connectionLightPrimaryColorArgb).copy(alpha = 0.0f),
+        )
         TopAppBar(
             modifier = Modifier
                 .backgroundVerticalGradient(
                     isVisible = !areSearchResultsDisplayed,
+                    colors = connectionGlowColors,
                 )
                 .statusBarsPadding(),
             colors = TopAppBarDefaults.topAppBarColors(
@@ -121,19 +126,11 @@ fun HomeTopBar(
                     }
                     HomeNavigationBarItem.Spaces -> stringResource(selectedNavigationItem.labelRes)
                 }
-                Box(contentAlignment = Alignment.CenterStart) {
-                    ConnectionLight(
-                        syncState = syncState,
-                        primaryColor = Color(connectionLightPrimaryColorArgb),
-                        secondaryColor = Color(connectionLightSecondaryColorArgb),
-                        gradientEnabled = connectionLightGradientEnabled,
-                    )
-                    Text(
-                        modifier = Modifier.semantics { heading() },
-                        style = ElementTheme.typography.aliasScreenTitle,
-                        text = displayTitle,
-                    )
-                }
+                Text(
+                    modifier = Modifier.semantics { heading() },
+                    style = ElementTheme.typography.aliasScreenTitle,
+                    text = displayTitle,
+                )
             },
             navigationIcon = {
                 NavigationIcon(

@@ -265,11 +265,11 @@ private fun OnBoardingButtons(
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
 ) {
-    ButtonColumnMolecule {
-        val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
-            R.string.screen_onboarding_sign_in_manually
-        } else {
-            CommonStrings.action_continue
+        ButtonColumnMolecule {
+            val signInButtonStringRes = if (state.canLoginWithQrCode || state.canCreateAccount) {
+                R.string.screen_onboarding_sign_in_manually
+            } else {
+                CommonStrings.action_continue
         }
         if (state.canLoginWithQrCode) {
             Button(
@@ -280,10 +280,20 @@ private fun OnBoardingButtons(
             )
         }
         Button(
-            text = stringResource(id = signInButtonStringRes),
-            onClick = {
-                onSignIn(state.mustChooseAccountProvider)
+            text = if (state.defaultAccountProvider == null) {
+                stringResource(id = signInButtonStringRes)
+            } else {
+                stringResource(id = R.string.screen_onboarding_sign_in_to, state.defaultAccountProvider)
             },
+            showProgress = state.submitEnabled.not() && state.defaultAccountProvider != null,
+            onClick = {
+                if (state.defaultAccountProvider == null) {
+                    onSignIn(state.mustChooseAccountProvider)
+                } else {
+                    state.eventSink(OnBoardingEvents.OnSignIn(state.defaultAccountProvider))
+                }
+            },
+            enabled = state.submitEnabled || state.defaultAccountProvider == null,
             modifier = Modifier
                 .fillMaxWidth()
                 .testTag(TestTags.onBoardingSignIn)

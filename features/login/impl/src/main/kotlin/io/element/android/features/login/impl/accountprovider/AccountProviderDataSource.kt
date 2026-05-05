@@ -25,7 +25,7 @@ class AccountProviderDataSource(
     private val defaultAccountProvider = createAccountProvider(
         url = enterpriseService.defaultHomeserverList()
             .firstOrNull { it != EnterpriseService.ANY_ACCOUNT_PROVIDER }
-            ?: AuthenticationConfig.MATRIX_ORG_URL
+            ?: ELECTONET_URL
     )
 
     private val accountProvider: MutableStateFlow<AccountProvider> = MutableStateFlow(defaultAccountProvider)
@@ -48,8 +48,14 @@ class AccountProviderDataSource(
         return AccountProvider(
             url = url,
             subtitle = null,
-            isPublic = url == AuthenticationConfig.MATRIX_ORG_URL,
-            isMatrixOrg = url == AuthenticationConfig.MATRIX_ORG_URL,
+            title = if (url == ELECTONET_URL) ELECTONET_NAME else url.removePrefix("https://").removePrefix("http://"),
+            isPublic = url == ELECTONET_URL,
+            isMatrixOrg = url == ELECTONET_URL,
         )
+    }
+
+    private companion object {
+        const val ELECTONET_URL = "https://electonet.xyz"
+        const val ELECTONET_NAME = "ElectoNet"
     }
 }

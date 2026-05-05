@@ -64,6 +64,7 @@ class OnBoardingPresenter(
             elonConfigRepository.refreshConfig()
             value = true
         }
+        val remoteConfig by elonConfigRepository.config.collectAsState()
         val forcedAccountProvider = remember {
             // If defaultHomeserverList() returns a singleton list, this is the default account provider.
             // In this case, the user can sign in using this homeserver, or use QrCode login
@@ -86,10 +87,10 @@ class OnBoardingPresenter(
                 }
             }
         }
-        val defaultAccountProvider = remember(linkAccountProvider) {
+        val defaultAccountProvider = remember(linkAccountProvider, remoteConfig) {
             // If there is a forced account provider, this is the default account provider
             // Else use the account provider passed in the params if any and if allowed
-            forcedAccountProvider ?: linkAccountProvider
+            forcedAccountProvider ?: linkAccountProvider ?: remoteConfig.defaultHomeserver
         }
         val canLoginWithQrCode by produceState(initialValue = false, linkAccountProvider) {
             value = linkAccountProvider == null
