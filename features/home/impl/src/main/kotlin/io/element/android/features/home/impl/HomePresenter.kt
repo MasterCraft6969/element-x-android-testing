@@ -29,7 +29,6 @@ import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarM
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.sync.SyncService
-import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.collections.immutable.persistentListOf
@@ -63,7 +62,7 @@ class HomePresenter(
             )
         }.collectAsState(initial = persistentListOf(matrixUser))
         val isOnline by syncService.isOnline.collectAsState()
-        val syncState by syncService.syncState.collectAsState(initial = SyncState.Idle)
+        val syncState by syncService.syncState.collectAsState()
         val connectionLightPrimaryColor by remember { appPreferencesStore.getConnectionLightPrimaryColorFlow() }.collectAsState(initial = 0xFFA8D8FF.toInt())
         val connectionLightSecondaryColor by remember { appPreferencesStore.getConnectionLightSecondaryColorFlow() }.collectAsState(initial = 0xFFF0F4FF.toInt())
         val connectionLightGradientEnabled by remember { appPreferencesStore.isConnectionLightGradientEnabledFlow() }.collectAsState(initial = false)

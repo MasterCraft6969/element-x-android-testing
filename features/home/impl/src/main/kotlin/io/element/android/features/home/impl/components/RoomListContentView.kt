@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -69,9 +70,11 @@ fun RoomListContentView(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     onCreateRoomClick: () -> Unit,
+    unreadIndicatorColor: Color = Color.Unspecified,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
+    val resolvedUnreadIndicatorColor = unreadIndicatorColor.takeOrElse { ElementTheme.colors.unreadIndicator }
     when (contentState) {
         is RoomListContentState.Skeleton -> {
             SkeletonView(
@@ -102,6 +105,7 @@ fun RoomListContentView(
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = onRoomClick,
                 lazyListState = lazyListState,
+                unreadIndicatorColor = resolvedUnreadIndicatorColor,
                 contentPadding = contentPadding,
             )
         }
@@ -183,6 +187,7 @@ private fun RoomsView(
     onRoomClick: (RoomListRoomSummary) -> Unit,
     contentPadding: PaddingValues,
     lazyListState: LazyListState,
+    unreadIndicatorColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val isSpaceFilterSelected = spaceFiltersState is SpaceFiltersState.Selected
@@ -203,6 +208,7 @@ private fun RoomsView(
             onRoomClick = onRoomClick,
             contentPadding = contentPadding,
             lazyListState = lazyListState,
+            unreadIndicatorColor = unreadIndicatorColor,
             modifier = modifier.fillMaxSize(),
         )
     }
@@ -218,6 +224,7 @@ private fun RoomsViewList(
     onRoomClick: (RoomListRoomSummary) -> Unit,
     contentPadding: PaddingValues,
     lazyListState: LazyListState,
+    unreadIndicatorColor: Color,
     modifier: Modifier = Modifier,
 ) {
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
@@ -275,6 +282,7 @@ private fun RoomsViewList(
                     state.seenRoomInvites.contains(room.roomId),
                 onClick = onRoomClick,
                 eventSink = eventSink,
+                unreadIndicatorColor = unreadIndicatorColor,
             )
             if (index != state.summaries.lastIndex) {
                 HorizontalDivider()

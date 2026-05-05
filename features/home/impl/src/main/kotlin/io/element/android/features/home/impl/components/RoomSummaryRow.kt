@@ -31,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -77,8 +78,10 @@ internal fun RoomSummaryRow(
     isInviteSeen: Boolean,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvent) -> Unit,
+    unreadIndicatorColor: Color = Color.Unspecified,
     modifier: Modifier = Modifier,
 ) {
+    val resolvedUnreadIndicatorColor = unreadIndicatorColor.takeOrElse { ElementTheme.colors.unreadIndicator }
     Box(modifier = modifier) {
         when (room.displayType) {
             RoomSummaryDisplayType.PLACEHOLDER -> {
@@ -93,7 +96,11 @@ internal fun RoomSummaryRow(
                         Timber.d("Long click on invite room")
                     },
                 ) {
-                    InviteNameAndIndicatorRow(name = room.name, isInviteSeen = isInviteSeen)
+                    InviteNameAndIndicatorRow(
+                        name = room.name,
+                        isInviteSeen = isInviteSeen,
+                        unreadIndicatorColor = resolvedUnreadIndicatorColor,
+                    )
                     InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender)
                     if (!room.isDm && room.inviteSender != null) {
                         Spacer(modifier = Modifier.height(4.dp))
@@ -125,9 +132,13 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        unreadIndicatorColor = resolvedUnreadIndicatorColor,
                     )
-                    MessagePreviewAndIndicatorRow(room = room)
+                    MessagePreviewAndIndicatorRow(
+                        room = room,
+                        unreadIndicatorColor = resolvedUnreadIndicatorColor,
+                    )
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -141,7 +152,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = null,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        unreadIndicatorColor = resolvedUnreadIndicatorColor,
                     )
                     if (room.canonicalAlias != null) {
                         Text(
@@ -217,6 +229,7 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
+    unreadIndicatorColor: Color,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -239,7 +252,7 @@ private fun NameAndTimestampRow(
             text = timestamp ?: "",
             style = ElementTheme.typography.fontBodySmMedium,
             color = if (isHighlighted) {
-                ElementTheme.colors.unreadIndicator
+                unreadIndicatorColor
             } else {
                 ElementTheme.colors.roomListRoomMessageDate
             },
@@ -273,6 +286,7 @@ private fun InviteSubtitle(
 @Composable
 private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
+    unreadIndicatorColor: Color,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -346,7 +360,7 @@ private fun MessagePreviewAndIndicatorRow(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            val tint = if (room.isHighlighted) ElementTheme.colors.unreadIndicator else ElementTheme.colors.iconQuaternary
+            val tint = if (room.isHighlighted) unreadIndicatorColor else ElementTheme.colors.iconQuaternary
             if (room.hasRoomCall) {
                 OnGoingCallIcon(
                     color = tint,
@@ -356,7 +370,7 @@ private fun MessagePreviewAndIndicatorRow(
             if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
                 NotificationOffIndicatorAtom()
             } else if (room.numberOfUnreadMentions > 0) {
-                MentionIndicatorAtom()
+                MentionIndicatorAtom(color = unreadIndicatorColor)
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
@@ -373,6 +387,7 @@ private fun MessagePreviewAndIndicatorRow(
 private fun InviteNameAndIndicatorRow(
     name: String?,
     isInviteSeen: Boolean,
+    unreadIndicatorColor: Color,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -393,7 +408,7 @@ private fun InviteNameAndIndicatorRow(
         )
         if (!isInviteSeen) {
             UnreadIndicatorAtom(
-                color = ElementTheme.colors.unreadIndicator
+                color = unreadIndicatorColor
             )
         }
     }
@@ -423,12 +438,14 @@ private fun NotificationOffIndicatorAtom() {
 }
 
 @Composable
-private fun MentionIndicatorAtom() {
+private fun MentionIndicatorAtom(
+    color: Color,
+) {
     Icon(
         modifier = Modifier.size(16.dp),
         contentDescription = stringResource(CommonStrings.a11y_notifications_new_mentions),
         imageVector = CompoundIcons.Mention(),
-        tint = ElementTheme.colors.unreadIndicator,
+        tint = color,
     )
 }
 

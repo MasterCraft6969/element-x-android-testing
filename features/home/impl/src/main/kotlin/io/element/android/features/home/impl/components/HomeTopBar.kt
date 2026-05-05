@@ -8,6 +8,7 @@
 
 package io.element.android.features.home.impl.components
 
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -107,6 +108,8 @@ fun HomeTopBar(
     spaceFiltersState: SpaceFiltersState,
     modifier: Modifier = Modifier,
 ) {
+    Log.d("ElonSync", "SyncState: $syncState")
+
     Column(modifier) {
         val targetGlowAlpha = when (syncState) {
             SyncState.Idle -> 1f

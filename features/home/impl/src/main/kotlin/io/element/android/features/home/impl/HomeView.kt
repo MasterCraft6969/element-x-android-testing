@@ -264,6 +264,7 @@ private fun HomeScaffold(
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
                         onCreateRoomClick = onStartChatClick,
+                        unreadIndicatorColor = Color(state.connectionLightPrimaryColorArgb),
                         contentPadding = contentPadding,
                         modifier = Modifier
                             .padding(
