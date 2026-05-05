@@ -1,4 +1,4 @@
-Set-Content .github\workflows\build.yml @'
+$content = @"
 name: Build Elyon
 
 on:
@@ -40,4 +40,10 @@ jobs:
           name: elyon-debug
           path: app/build/outputs/apk/gplay/debug/*-universal-debug.apk
           retention-days: 30
-'@
+"@
+
+[System.IO.File]::WriteAllText(
+    "G:\Elyon\element-x-android-develop\element-x-android-develop\.github\workflows\build.yml",
+    $content,
+    [System.Text.UTF8Encoding]::new($false)
+)
