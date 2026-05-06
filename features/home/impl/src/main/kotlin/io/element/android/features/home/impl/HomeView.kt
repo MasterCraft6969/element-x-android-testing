@@ -68,6 +68,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -76,6 +77,7 @@ import kotlinx.coroutines.launch
 fun HomeView(
     homeState: HomeState,
     onRoomClick: (RoomId) -> Unit,
+    onMessageClick: (RoomId, EventId) -> Unit,
     onSettingsClick: () -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -129,6 +131,7 @@ fun HomeView(
             eventSink = state.eventSink,
             hideInvitesAvatars = state.hideInvitesAvatars,
             onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
+            onMessageClick = { roomId, eventId -> if (firstThrottler.canHandle()) onMessageClick(roomId, eventId) },
             modifier = Modifier
                 .fillMaxSize()
                 .background(ElementTheme.colors.bgCanvasDefault)
@@ -356,6 +359,7 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
     HomeView(
         homeState = state,
         onRoomClick = {},
+        onMessageClick = { _, _ -> },
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
@@ -376,6 +380,7 @@ internal fun HomeViewA11yPreview() = ElementPreview {
     HomeView(
         homeState = aHomeState(),
         onRoomClick = {},
+        onMessageClick = { _, _ -> },
         onSettingsClick = {},
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},

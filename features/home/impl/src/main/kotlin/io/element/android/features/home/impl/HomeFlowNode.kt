@@ -54,6 +54,7 @@ import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.utils.DelayedVisibility
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
@@ -181,6 +182,7 @@ class HomeFlowNode(
 
             fun navigateToRoom(
                 roomId: RoomId,
+                eventId: EventId? = null,
             ) {
                 if (!loadingJoinedRoomJob.value.isUninitialized()) {
                     Timber.w("Already loading a room, ignoring navigateToRoom for $roomId")
@@ -193,7 +195,7 @@ class HomeFlowNode(
                     }.fold(
                         onSuccess = { joinedRoom ->
                             if (isActive) {
-                                callback.navigateToRoom(roomId, joinedRoom)
+                                callback.navigateToRoom(roomId, joinedRoom, eventId)
                                 loadingJoinedRoomJob.value = AsyncData.Success(coroutineContext.job)
                                 // Wait a bit before resetting the state to avoid allowing to open several rooms
                                 delay(200.milliseconds)
@@ -203,7 +205,7 @@ class HomeFlowNode(
                         onFailure = {
                             // If the operation wasn't cancelled, navigate without the room, using the room id
                             if (it !is CancellationException) {
-                                callback.navigateToRoom(roomId, null)
+                                callback.navigateToRoom(roomId, null, eventId)
                             }
                             loadingJoinedRoomJob.value = AsyncData.Failure(error = it, prevData = coroutineContext.job)
                             // Wait a bit before resetting the state to avoid allowing to open several rooms
@@ -218,6 +220,7 @@ class HomeFlowNode(
             HomeView(
                 homeState = state,
                 onRoomClick = ::navigateToRoom,
+                onMessageClick = ::navigateToRoom,
                 onSettingsClick = callback::navigateToSettings,
                 onStartChatClick = callback::navigateToCreateRoom,
                 onCreateSpaceClick = callback::navigateToCreateSpace,

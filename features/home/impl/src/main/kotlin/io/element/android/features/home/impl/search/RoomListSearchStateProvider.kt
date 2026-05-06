@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.aRoomListRoomSummaryList
+import io.element.android.libraries.matrix.api.search.MessageSearchResult
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -22,7 +23,7 @@ class RoomListSearchStateProvider : PreviewParameterProvider<RoomListSearchState
             aRoomListSearchState(
                 isSearchActive = true,
                 query = "Test",
-                results = aRoomListRoomSummaryList()
+                roomResults = aRoomListRoomSummaryList(),
             ),
         )
 }
@@ -30,11 +31,19 @@ class RoomListSearchStateProvider : PreviewParameterProvider<RoomListSearchState
 fun aRoomListSearchState(
     isSearchActive: Boolean = false,
     query: String = "",
-    results: ImmutableList<RoomListRoomSummary> = persistentListOf(),
+    selectedTab: RoomListSearchTab = RoomListSearchTab.Rooms,
+    roomResults: ImmutableList<RoomListRoomSummary> = persistentListOf(),
+    messageResults: ImmutableList<MessageSearchResult> = persistentListOf(),
+    availableRooms: ImmutableList<RoomListRoomSummary> = persistentListOf(),
     eventSink: (RoomListSearchEvent) -> Unit = { },
 ) = RoomListSearchState(
     isSearchActive = isSearchActive,
     query = TextFieldState(initialText = query),
-    results = results,
+    selectedTab = selectedTab,
+    roomResults = roomResults,
+    messageResults = messageResults,
+    availableRooms = availableRooms,
+    selectedMessageRoomId = null,
+    isMessageSearchLoading = false,
     eventSink = eventSink,
 )

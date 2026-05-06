@@ -49,6 +49,10 @@ You don’t have any unread messages!"</string>
   <string name="screen_roomlist_main_space_title">"Chats"</string>
   <string name="screen_roomlist_mark_as_read">"Mark as read"</string>
   <string name="screen_roomlist_mark_as_unread">"Mark as unread"</string>
+  <string name="screen_search_all_rooms">"All rooms"</string>
+  <string name="screen_search_in_label">"Search in"</string>
+  <string name="screen_search_tab_messages">"Messages"</string>
+  <string name="screen_search_tab_rooms">"Rooms"</string>
   <string name="screen_roomlist_tombstoned_room_description">"This room has been upgraded"</string>
   <string name="screen_roomlist_your_spaces">"Your spaces"</string>
   <string name="session_verification_banner_message">"Looks like you’re using a new device. Verify with another device to access your encrypted messages."</string>

@@ -45,8 +45,21 @@ class RoomListSearchDataSource(
         source = RoomList.Source.All,
         coroutineScope = coroutineScope
     )
+    private val allRoomsList = roomListService.createRoomList(
+        pageSize = 500,
+        source = RoomList.Source.All,
+        coroutineScope = coroutineScope
+    )
 
     val roomSummaries: Flow<ImmutableList<RoomListRoomSummary>> = roomList.summaries
+        .map { roomSummaries ->
+            roomSummaries
+                .map(roomSummaryFactory::create)
+                .toImmutableList()
+        }
+        .flowOn(coroutineDispatchers.computation)
+
+    val allRoomSummaries: Flow<ImmutableList<RoomListRoomSummary>> = allRoomsList.summaries
         .map { roomSummaries ->
             roomSummaries
                 .map(roomSummaryFactory::create)
