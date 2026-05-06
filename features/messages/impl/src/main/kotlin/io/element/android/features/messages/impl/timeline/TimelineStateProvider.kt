@@ -58,6 +58,7 @@ fun aTimelineState(
     displayThreadSummaries: Boolean = false,
     displayFloatingDateBadge: Boolean = false,
     focusedEventHighlightColorArgb: Int = 0xFFA8D8FF.toInt(),
+    accentColorArgb: Int = 0xFFA8D8FF.toInt(),
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -79,6 +80,7 @@ fun aTimelineState(
         displayThreadSummaries = displayThreadSummaries,
         displayFloatingDateBadge = displayFloatingDateBadge,
         focusedEventHighlightColorArgb = focusedEventHighlightColorArgb,
+        accentColorArgb = accentColorArgb,
         eventSink = eventSink,
     )
 }

@@ -15,6 +15,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.virtual.TimelineItemDaySeparatorView
@@ -35,13 +36,14 @@ import timber.log.Timber
 fun TimelineItemVirtualRow(
     virtual: TimelineItem.Virtual,
     timelineRoomInfo: TimelineRoomInfo,
+    accentColorArgb: Int = 0xFFA8D8FF.toInt(),
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
         when (virtual.model) {
             is TimelineItemDaySeparatorModel -> TimelineItemDaySeparatorView(virtual.model)
-            TimelineItemReadMarkerModel -> TimelineItemReadMarkerView()
+            TimelineItemReadMarkerModel -> TimelineItemReadMarkerView(accentColor = Color(accentColorArgb))
             TimelineItemRoomBeginningModel -> {
                 TimelineItemRoomBeginningView(
                     predecessorRoom = timelineRoomInfo.predecessorRoom,

@@ -83,7 +83,8 @@ fun ChangeAccountProviderView(
                     val alteredItem = if (item.isMatrixOrg) {
                         // Set the subtitle from the resource
                         item.copy(
-                            subtitle = stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle),
+                            subtitle = stringResource(id = R.string.screen_change_account_provider_matrix_org_subtitle)
+                                .replace("Matrix.org", "ElectoNet"),
                         )
                     } else {
                         item

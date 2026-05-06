@@ -36,6 +36,7 @@ data class TimelineState(
     val displayThreadSummaries: Boolean,
     val displayFloatingDateBadge: Boolean,
     val focusedEventHighlightColorArgb: Int,
+    val accentColorArgb: Int,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

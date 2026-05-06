@@ -60,6 +60,7 @@ internal fun TimelineItemRow(
     timelineProtectionState: TimelineProtectionState,
     focusedEventId: EventId?,
     focusedEventHighlightColorArgb: Int = 0xFFA8D8FF.toInt(),
+    accentColorArgb: Int = 0xFFA8D8FF.toInt(),
     displayThreadSummaries: Boolean,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -106,6 +107,7 @@ internal fun TimelineItemRow(
                 TimelineItemVirtualRow(
                     virtual = timelineItem,
                     timelineRoomInfo = timelineRoomInfo,
+                    accentColorArgb = accentColorArgb,
                     eventSink = eventSink,
                 )
             }
@@ -197,6 +199,7 @@ internal fun TimelineItemRow(
                     isLastOutgoingMessage = isLastOutgoingMessage,
                     focusedEventId = focusedEventId,
                     focusedEventHighlightColorArgb = focusedEventHighlightColorArgb,
+                    accentColorArgb = accentColorArgb,
                     displayThreadSummaries = displayThreadSummaries,
                     onClick = onContentClick,
                     onLongClick = onLongClick,

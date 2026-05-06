@@ -67,8 +67,8 @@ class ChooseAccountProviderPresenter(
                         url = homeserver.url,
                         title = if (homeserver.url == "https://electonet.xyz") "ElectoNet" else homeserver.name,
                         subtitle = homeserver.description,
-                        isPublic = false,
-                        isMatrixOrg = false,
+                        isPublic = homeserver.url == "https://electonet.xyz",
+                        isMatrixOrg = homeserver.url == "https://electonet.xyz",
                     )
                 }
                 .toImmutableList()

@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -26,6 +27,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
 internal fun TimelineItemReadMarkerView(
+    accentColor: Color = ElementTheme.colors.textActionAccent,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -38,13 +40,13 @@ internal fun TimelineItemReadMarkerView(
         Text(
             text = stringResource(id = R.string.screen_room_timeline_read_marker_title).uppercase(),
             style = ElementTheme.typography.fontBodySmMedium,
-            color = ElementTheme.colors.textActionAccent,
+            color = accentColor,
         )
         HorizontalDivider(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 2.dp),
-            color = ElementTheme.colors.textActionAccent,
+            color = accentColor,
         )
     }
 }
@@ -52,5 +54,5 @@ internal fun TimelineItemReadMarkerView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemReadMarkerViewPreview() = ElementPreview {
-    TimelineItemReadMarkerView()
+    TimelineItemReadMarkerView(accentColor = Color(0xFFA8D8FF))
 }

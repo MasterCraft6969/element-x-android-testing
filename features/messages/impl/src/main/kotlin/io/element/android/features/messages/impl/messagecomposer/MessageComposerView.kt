@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -35,6 +36,7 @@ import kotlinx.coroutines.launch
 internal fun MessageComposerView(
     state: MessageComposerState,
     voiceMessageState: VoiceMessageComposerState,
+    sendButtonBackgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val view = LocalView.current
@@ -116,6 +118,7 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+        sendButtonBackgroundColor = sendButtonBackgroundColor,
     )
 
     AsyncActionView(
@@ -135,11 +138,13 @@ internal fun MessageComposerViewPreview(
             modifier = Modifier.height(IntrinsicSize.Min),
             state = state,
             voiceMessageState = aVoiceMessageComposerState(),
+            sendButtonBackgroundColor = Color(0xFFA8D8FF),
         )
         MessageComposerView(
             modifier = Modifier.height(200.dp),
             state = state,
             voiceMessageState = aVoiceMessageComposerState(),
+            sendButtonBackgroundColor = Color(0xFFA8D8FF),
         )
         DisabledComposerView()
     }
@@ -155,6 +160,7 @@ internal fun MessageComposerViewVoicePreview(
             modifier = Modifier.height(IntrinsicSize.Min),
             state = aMessageComposerState(),
             voiceMessageState = state,
+            sendButtonBackgroundColor = Color(0xFFA8D8FF),
         )
     }
 }

@@ -326,6 +326,7 @@ class TimelinePresenter(
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
             focusedEventHighlightColorArgb = focusedEventHighlightColorArgb,
+            accentColorArgb = focusedEventHighlightColorArgb,
             eventSink = ::handleEvent,
         )
     }

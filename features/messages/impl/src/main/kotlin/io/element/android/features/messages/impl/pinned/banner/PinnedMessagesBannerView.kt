@@ -49,8 +49,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
-import io.element.android.libraries.designsystem.theme.pinnedMessageBannerBorder
-import io.element.android.libraries.designsystem.theme.pinnedMessageBannerIndicator
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -62,6 +60,7 @@ fun PinnedMessagesBannerView(
     state: PinnedMessagesBannerState,
     onClick: (EventId) -> Unit,
     onViewAllClick: () -> Unit,
+    accentColor: Color = ElementTheme.colors.textActionAccent,
     modifier: Modifier = Modifier,
 ) {
     when (state) {
@@ -71,6 +70,7 @@ fun PinnedMessagesBannerView(
                 state = state,
                 onClick = onClick,
                 onViewAllClick = onViewAllClick,
+                accentColor = accentColor,
                 modifier = modifier,
             )
         }
@@ -82,10 +82,11 @@ private fun PinnedMessagesBannerRow(
     state: PinnedMessagesBannerState.Visible,
     onClick: (EventId) -> Unit,
     onViewAllClick: () -> Unit,
+    accentColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val analyticsService = LocalAnalyticsService.current
-    val borderColor = ElementTheme.colors.pinnedMessageBannerBorder
+    val borderColor = accentColor.copy(alpha = 0.25f)
     Row(
         modifier = modifier
             .background(color = ElementTheme.colors.bgCanvasDefault)
@@ -105,11 +106,12 @@ private fun PinnedMessagesBannerRow(
         PinIndicators(
             pinIndex = state.currentPinnedMessageIndex(),
             pinsCount = state.pinnedMessagesCount(),
+            accentColor = accentColor,
         )
         Icon(
             imageVector = CompoundIcons.PinSolid(),
             contentDescription = null,
-            tint = ElementTheme.colors.iconSecondary,
+            tint = accentColor,
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .size(20.dp)
@@ -118,6 +120,7 @@ private fun PinnedMessagesBannerRow(
             index = state.currentPinnedMessageIndex(),
             totalCount = state.pinnedMessagesCount(),
             message = state.formattedMessage(),
+            accentColor = accentColor,
             modifier = Modifier.weight(1f)
         )
         ViewAllButton(
@@ -174,6 +177,7 @@ private fun Modifier.drawBorder(borderColor: Color): Modifier {
 private fun PinIndicators(
     pinIndex: Int,
     pinsCount: Int,
+    accentColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val indicatorHeight = remember(pinsCount) {
@@ -212,9 +216,9 @@ private fun PinIndicators(
                     .height(indicatorHeight.dp)
                     .background(
                         color = if (index == activeIndex) {
-                            ElementTheme.colors.iconAccentPrimary
+                            accentColor
                         } else if (index < shownIndicators) {
-                            ElementTheme.colors.pinnedMessageBannerIndicator
+                            accentColor.copy(alpha = 0.35f)
                         } else {
                             Color.Transparent
                         }
@@ -229,6 +233,7 @@ private fun PinnedMessageItem(
     index: Int,
     totalCount: Int,
     message: AnnotatedString?,
+    accentColor: Color,
     modifier: Modifier = Modifier,
 ) {
     val countMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator, index + 1, totalCount)
@@ -241,7 +246,7 @@ private fun PinnedMessageItem(
                     boldText = countMessage,
                 ),
                 style = ElementTheme.typography.fontBodySmMedium,
-                color = ElementTheme.colors.textActionAccent,
+                color = accentColor,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
@@ -293,5 +298,6 @@ internal fun PinnedMessagesBannerViewPreview(@PreviewParameter(PinnedMessagesBan
         state = state,
         onClick = {},
         onViewAllClick = {},
+        accentColor = Color(0xFFA8D8FF),
     )
 }

@@ -42,6 +42,7 @@ class ElonConfigRepository(
 
     private val _config = MutableStateFlow(defaultConfig)
     val config: StateFlow<ElonConfigModel> = _config.asStateFlow()
+    private var hasLoadedCachedOrDefault = false
 
     suspend fun refreshConfig() {
         val remoteConfig = remoteConfigUrls.firstNotNullOfOrNull { url ->
@@ -62,6 +63,14 @@ class ElonConfigRepository(
                 _config.value = cachedConfig ?: defaultConfig
             }
         }
+    }
+
+    suspend fun loadCachedOrDefault(): ElonConfigModel {
+        if (!hasLoadedCachedOrDefault) {
+            _config.value = readCachedConfig() ?: defaultConfig
+            hasLoadedCachedOrDefault = true
+        }
+        return _config.value
     }
 
     private suspend fun readCachedConfig(): ElonConfigModel? {

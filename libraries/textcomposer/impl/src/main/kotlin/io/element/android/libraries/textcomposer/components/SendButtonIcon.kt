@@ -35,6 +35,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 internal fun SendButtonIcon(
     canSendMessage: Boolean,
     isEditing: Boolean,
+    activeBackgroundColor: Color = ElementTheme.colors.bgAccentRest,
     modifier: Modifier = Modifier,
 ) {
     val iconVector = when {
@@ -46,7 +47,7 @@ internal fun SendButtonIcon(
         else -> 2.dp
     }
     val backgroundColor = if (canSendMessage) {
-        ElementTheme.colors.bgAccentRest
+        activeBackgroundColor
     } else {
         Color.Transparent
     }

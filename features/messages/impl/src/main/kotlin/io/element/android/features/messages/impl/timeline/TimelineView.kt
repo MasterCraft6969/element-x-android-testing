@@ -175,6 +175,7 @@ fun TimelineView(
                         isLastOutgoingMessage = state.isLastOutgoingMessage(timelineItem.identifier()),
                         focusedEventId = state.focusedEventId,
                         focusedEventHighlightColorArgb = state.focusedEventHighlightColorArgb,
+                        accentColorArgb = state.accentColorArgb,
                         displayThreadSummaries = state.displayThreadSummaries,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,

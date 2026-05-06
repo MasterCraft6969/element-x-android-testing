@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -130,6 +131,7 @@ fun TextComposer(
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
     showTextFormatting: Boolean = false,
+    sendButtonBackgroundColor: Color = ElementTheme.colors.bgAccentRest,
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -288,6 +290,7 @@ fun TextComposer(
                                 SendButtonIcon(
                                     canSendMessage = true,
                                     isEditing = composerMode.isEditing,
+                                    activeBackgroundColor = sendButtonBackgroundColor,
                                 )
                             },
                         )
@@ -302,6 +305,7 @@ fun TextComposer(
                     SendButtonIcon(
                         canSendMessage = true,
                         isEditing = true,
+                        activeBackgroundColor = sendButtonBackgroundColor,
                     )
                 },
             )
@@ -314,6 +318,7 @@ fun TextComposer(
                     SendButtonIcon(
                         canSendMessage = true,
                         isEditing = false,
+                        activeBackgroundColor = sendButtonBackgroundColor,
                     )
                 },
             )
@@ -334,6 +339,7 @@ fun TextComposer(
                     SendButtonIcon(
                         canSendMessage = canSendTextMessage,
                         isEditing = true,
+                        activeBackgroundColor = sendButtonBackgroundColor,
                     )
                 },
             )
@@ -349,6 +355,7 @@ fun TextComposer(
                     SendButtonIcon(
                         canSendMessage = canSendTextMessage,
                         isEditing = false,
+                        activeBackgroundColor = sendButtonBackgroundColor,
                     )
                 },
             )

@@ -61,8 +61,11 @@ class OnBoardingPresenter(
     override fun present(): OnBoardingState {
         val localCoroutineScope = rememberCoroutineScope()
         val remoteConfigLoaded by produceState(initialValue = false) {
-            elonConfigRepository.refreshConfig()
+            elonConfigRepository.loadCachedOrDefault()
             value = true
+            localCoroutineScope.launch {
+                elonConfigRepository.refreshConfig()
+            }
         }
         val forcedAccountProvider = remember {
             // If defaultHomeserverList() returns a singleton list, this is the default account provider.

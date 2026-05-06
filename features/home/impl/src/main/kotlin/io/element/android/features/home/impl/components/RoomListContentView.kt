@@ -50,6 +50,7 @@ import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.unreadIndicator
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -74,7 +75,11 @@ fun RoomListContentView(
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
-    val resolvedUnreadIndicatorColor = unreadIndicatorColor.takeOrElse { ElementTheme.colors.unreadIndicator }
+    val resolvedUnreadIndicatorColor = if (unreadIndicatorColor == Color.Unspecified) {
+        ElementTheme.colors.unreadIndicator
+    } else {
+        unreadIndicatorColor
+    }
     when (contentState) {
         is RoomListContentState.Skeleton -> {
             SkeletonView(
