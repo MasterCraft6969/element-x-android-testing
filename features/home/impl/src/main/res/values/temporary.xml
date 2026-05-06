@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_search_message_results_hint">Search your messages</string>
+    <string name="screen_search_message_results_hint_subtitle">Type a word or phrase to search across your chats.</string>
+    <string name="screen_search_message_results_loading">Searching messages…</string>
+    <string name="screen_search_message_results_empty">No messages matched “%1$s”</string>
+</resources>

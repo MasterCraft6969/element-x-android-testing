@@ -12,9 +12,12 @@ import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.aRoomListRoomSummaryList
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.search.MessageSearchResult
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 class RoomListSearchStateProvider : PreviewParameterProvider<RoomListSearchState> {
     override val values: Sequence<RoomListSearchState>
@@ -24,6 +27,24 @@ class RoomListSearchStateProvider : PreviewParameterProvider<RoomListSearchState
                 isSearchActive = true,
                 query = "Test",
                 roomResults = aRoomListRoomSummaryList(),
+            ),
+            aRoomListSearchState(
+                isSearchActive = true,
+                query = "hello",
+                selectedTab = RoomListSearchTab.Messages,
+                messageResults = listOf(
+                    MessageSearchResult(
+                        eventId = EventId("\$event"),
+                        roomId = RoomId("!room:example.org"),
+                        roomName = "General",
+                        senderId = "@alice:example.org",
+                        senderName = "Alice",
+                        senderAvatar = null,
+                        snippet = "Hello from message search",
+                        timestamp = 1_735_987_200_000,
+                    )
+                ).toImmutableList(),
+                hasMessageSearchAttempted = true,
             ),
         )
 }
@@ -35,6 +56,7 @@ fun aRoomListSearchState(
     roomResults: ImmutableList<RoomListRoomSummary> = persistentListOf(),
     messageResults: ImmutableList<MessageSearchResult> = persistentListOf(),
     availableRooms: ImmutableList<RoomListRoomSummary> = persistentListOf(),
+    hasMessageSearchAttempted: Boolean = false,
     eventSink: (RoomListSearchEvent) -> Unit = { },
 ) = RoomListSearchState(
     isSearchActive = isSearchActive,
@@ -45,5 +67,6 @@ fun aRoomListSearchState(
     availableRooms = availableRooms,
     selectedMessageRoomId = null,
     isMessageSearchLoading = false,
+    hasMessageSearchAttempted = hasMessageSearchAttempted,
     eventSink = eventSink,
 )

@@ -98,8 +98,7 @@ class DefaultMatrixSearchRepository(
         val snippet = event
             .get("content")
             ?.jsonObject
-            ?.string("body")
-            ?.takeIf { it.isNotBlank() }
+            ?.bestSnippet()
             ?: return null
 
         return MessageSearchResult(
@@ -150,10 +149,22 @@ class DefaultMatrixSearchRepository(
 
     private fun JsonObject.long(key: String): Long? = get(key)?.jsonPrimitive?.contentOrNull?.toLongOrNull()
 
+    private fun JsonObject.bestSnippet(): String? {
+        return string("body")?.takeIf { it.isNotBlank() }
+            ?: string("formatted_body")
+                ?.replace(HTML_TAG_REGEX, " ")
+                ?.replace(WHITESPACE_REGEX, " ")
+                ?.trim()
+                ?.takeIf { it.isNotBlank() }
+            ?: string("filename")?.takeIf { it.isNotBlank() }
+    }
+
     private fun JsonElement.primitiveContent(): String? = (this as? JsonPrimitive)?.contentOrNull
 
     private companion object {
         const val CONTENT_TYPE = "application/json"
         val JSON_MEDIA_TYPE = CONTENT_TYPE.toMediaType()
+        val HTML_TAG_REGEX = "<[^>]+>".toRegex()
+        val WHITESPACE_REGEX = "\\s+".toRegex()
     }
 }

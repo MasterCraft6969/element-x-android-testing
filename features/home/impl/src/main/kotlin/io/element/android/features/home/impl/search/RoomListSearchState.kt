@@ -23,6 +23,7 @@ data class RoomListSearchState(
     val availableRooms: ImmutableList<RoomListRoomSummary>,
     val selectedMessageRoomId: RoomId?,
     val isMessageSearchLoading: Boolean,
+    val hasMessageSearchAttempted: Boolean,
     val eventSink: (RoomListSearchEvent) -> Unit,
 )
 

@@ -45,6 +45,7 @@ class RoomListSearchPresenter(
         var selectedMessageRoomId by remember { mutableStateOf<RoomId?>(null) }
         var messageResults by remember { mutableStateOf<ImmutableList<MessageSearchResult>>(persistentListOf()) }
         var isMessageSearchLoading by remember { mutableStateOf(false) }
+        var hasMessageSearchAttempted by remember { mutableStateOf(false) }
 
         val coroutineScope = rememberCoroutineScope()
         val dataSource = remember { dataSourceFactory.create(coroutineScope) }
@@ -54,16 +55,22 @@ class RoomListSearchPresenter(
         }
 
         LaunchedEffect(searchQuery.text, selectedTab, selectedMessageRoomId) {
-            if (selectedTab != RoomListSearchTab.Messages) return@LaunchedEffect
+            if (selectedTab != RoomListSearchTab.Messages) {
+                isMessageSearchLoading = false
+                hasMessageSearchAttempted = false
+                return@LaunchedEffect
+            }
 
             val query = searchQuery.text.toString().trim()
             if (query.isBlank()) {
                 messageResults = persistentListOf()
                 isMessageSearchLoading = false
+                hasMessageSearchAttempted = false
                 return@LaunchedEffect
             }
 
             isMessageSearchLoading = true
+            hasMessageSearchAttempted = false
             delay(300)
             matrixSearchRepository.searchMessages(query, selectedMessageRoomId)
                 .onSuccess { results ->
@@ -72,6 +79,7 @@ class RoomListSearchPresenter(
                 .onFailure {
                     messageResults = persistentListOf()
                 }
+            hasMessageSearchAttempted = true
             isMessageSearchLoading = false
         }
 
@@ -87,6 +95,7 @@ class RoomListSearchPresenter(
                     selectedMessageRoomId = null
                     messageResults = persistentListOf()
                     isMessageSearchLoading = false
+                    hasMessageSearchAttempted = false
                 }
                 is RoomListSearchEvent.UpdateVisibleRange -> coroutineScope.launch {
                     dataSource.updateVisibleRange(visibleRange = event.range)
@@ -114,6 +123,7 @@ class RoomListSearchPresenter(
                 .toImmutableList(),
             selectedMessageRoomId = selectedMessageRoomId,
             isMessageSearchLoading = isMessageSearchLoading,
+            hasMessageSearchAttempted = hasMessageSearchAttempted,
             eventSink = ::handleEvent,
         )
     }

@@ -13,7 +13,10 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
@@ -24,12 +27,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -43,9 +46,11 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.components.RoomSummaryRow
@@ -59,10 +64,13 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.FilledTextField
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
@@ -223,18 +231,11 @@ private fun RoomListSearchContent(
                     }
                 }
                 RoomListSearchTab.Messages -> {
-                    LazyColumn(modifier = Modifier.weight(1f)) {
-                        items(
-                            items = state.messageResults,
-                            key = { result -> result.eventId.value },
-                        ) { result ->
-                            MessageSearchResultRow(
-                                result = result,
-                                timestamp = formatTimestamp(result.timestamp),
-                                onClick = { onMessageClick(result) },
-                            )
-                        }
-                    }
+                    MessageSearchResults(
+                        state = state,
+                        onMessageClick = ::onMessageClick,
+                        modifier = Modifier.weight(1f),
+                    )
                 }
             }
         }
@@ -250,7 +251,7 @@ private fun SearchTabs(
     selectedTab: RoomListSearchTab,
     onSelectTab: (RoomListSearchTab) -> Unit,
 ) {
-    ScrollableTabRow(selectedTabIndex = selectedTab.ordinal) {
+    TabRow(selectedTabIndex = selectedTab.ordinal) {
         RoomListSearchTab.entries.forEach { tab ->
             val title = when (tab) {
                 RoomListSearchTab.Rooms -> stringResource(R.string.screen_search_tab_rooms)
@@ -275,24 +276,42 @@ private fun MessageRoomFilter(
     val selectedLabel = rooms.firstOrNull { it.roomId == selectedRoomId }?.name
         ?: stringResource(R.string.screen_search_all_rooms)
 
-    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
         Text(
             text = stringResource(R.string.screen_search_in_label),
-            style = MaterialTheme.typography.labelMedium,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            style = ElementTheme.typography.fontBodySmMedium,
+            color = ElementTheme.colors.textSecondary,
         )
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(
-            text = selectedLabel,
-            style = MaterialTheme.typography.bodyLarge,
+        Spacer(modifier = Modifier.size(8.dp))
+        Surface(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable { expanded = true }
-                .padding(vertical = 8.dp),
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
-        DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                .padding(horizontal = 16.dp, vertical = 14.dp),
+            shape = RoundedCornerShape(16.dp),
+            border = androidx.compose.foundation.BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary),
+            color = ElementTheme.colors.bgSubtleSecondary,
+        ) {
+            Row {
+                Text(
+                    text = selectedLabel,
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                    modifier = Modifier.weight(1f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Icon(
+                    imageVector = CompoundIcons.ChevronDown(),
+                    contentDescription = null,
+                    tint = ElementTheme.colors.iconSecondary,
+                )
+            }
+        }
+        DropdownMenu(
+            expanded = expanded,
+            minWidth = 240.dp,
+            onDismissRequest = { expanded = false },
+        ) {
             DropdownMenuItem(
                 text = { Text(text = stringResource(R.string.screen_search_all_rooms)) },
                 onClick = {
@@ -307,6 +326,98 @@ private fun MessageRoomFilter(
                         expanded = false
                         onSelect(room.roomId)
                     },
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MessageSearchResults(
+    state: RoomListSearchState,
+    onMessageClick: (MessageSearchResult) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val trimmedQuery = state.query.text.toString().trim()
+    when {
+        trimmedQuery.isBlank() -> {
+            MessageSearchFeedback(
+                title = stringResource(R.string.screen_search_message_results_hint),
+                subtitle = stringResource(R.string.screen_search_message_results_hint_subtitle),
+                icon = CompoundIcons.Search(),
+                modifier = modifier,
+            )
+        }
+        state.isMessageSearchLoading -> {
+            Box(modifier = modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
+                Column(
+                    horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(12.dp),
+                ) {
+                    CircularProgressIndicator()
+                    Text(
+                        text = stringResource(R.string.screen_search_message_results_loading),
+                        style = ElementTheme.typography.fontBodyMdRegular,
+                        color = ElementTheme.colors.textSecondary,
+                    )
+                }
+            }
+        }
+        state.hasMessageSearchAttempted && state.messageResults.isEmpty() -> {
+            MessageSearchFeedback(
+                title = stringResource(R.string.screen_search_message_results_empty, trimmedQuery),
+                icon = CompoundIcons.Search(),
+                modifier = modifier,
+            )
+        }
+        else -> {
+            LazyColumn(modifier = modifier) {
+                items(
+                    items = state.messageResults,
+                    key = { result -> result.eventId.value },
+                ) { result ->
+                    MessageSearchResultRow(
+                        result = result,
+                        timestamp = formatTimestamp(result.timestamp),
+                        onClick = { onMessageClick(result) },
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun MessageSearchFeedback(
+    title: String,
+    modifier: Modifier = Modifier,
+    subtitle: String? = null,
+    icon: androidx.compose.ui.graphics.vector.ImageVector? = null,
+) {
+    Box(modifier = modifier.fillMaxSize(), contentAlignment = androidx.compose.ui.Alignment.Center) {
+        Column(
+            modifier = Modifier.padding(horizontal = 32.dp),
+            horizontalAlignment = androidx.compose.ui.Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
+            icon?.let {
+                Icon(
+                    imageVector = it,
+                    contentDescription = null,
+                    tint = ElementTheme.colors.iconSecondary,
+                )
+            }
+            Text(
+                text = title,
+                style = ElementTheme.typography.fontBodyLgMedium,
+                textAlign = TextAlign.Center,
+            )
+            subtitle?.let {
+                Text(
+                    text = it,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    textAlign = TextAlign.Center,
                 )
             }
         }
@@ -339,27 +450,27 @@ private fun MessageSearchResultRow(
             Row(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = result.senderName ?: result.senderId,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = ElementTheme.typography.fontBodyLgMedium,
                     modifier = Modifier.weight(1f),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
                 Text(
                     text = timestamp,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
                 )
             }
             Text(
                 text = result.roomName ?: result.roomId.value,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = ElementTheme.typography.fontBodySmRegular,
+                color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
             Text(
                 text = result.snippet,
-                style = MaterialTheme.typography.bodyMedium,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis,
             )
