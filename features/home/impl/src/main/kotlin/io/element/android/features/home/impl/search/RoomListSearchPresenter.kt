@@ -24,6 +24,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.search.MatrixSearchRepository
 import io.element.android.libraries.matrix.api.search.MessageSearchResult
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -42,7 +43,7 @@ class RoomListSearchPresenter(
         val searchQuery = rememberTextFieldState()
         var selectedTab by remember { mutableStateOf(RoomListSearchTab.Rooms) }
         var selectedMessageRoomId by remember { mutableStateOf<RoomId?>(null) }
-        var messageResults by remember { mutableStateOf(persistentListOf<MessageSearchResult>()) }
+        var messageResults by remember { mutableStateOf<ImmutableList<MessageSearchResult>>(persistentListOf()) }
         var isMessageSearchLoading by remember { mutableStateOf(false) }
 
         val coroutineScope = rememberCoroutineScope()
