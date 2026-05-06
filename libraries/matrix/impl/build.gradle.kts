@@ -47,6 +47,8 @@ dependencies {
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
+    implementation(platform(libs.network.okhttp.bom))
+    implementation(libs.network.okhttp)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.featureflag.test)

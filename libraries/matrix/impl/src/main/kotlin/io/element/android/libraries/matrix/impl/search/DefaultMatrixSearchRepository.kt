@@ -137,7 +137,7 @@ class DefaultMatrixSearchRepository(
                     if (roomId != null) {
                         putJsonObject("filter") {
                             putJsonArray("rooms") {
-                                add(roomId.value)
+                                add(JsonPrimitive(roomId.value))
                             }
                         }
                     }
