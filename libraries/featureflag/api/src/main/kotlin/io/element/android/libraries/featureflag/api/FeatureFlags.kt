@@ -26,7 +26,7 @@ enum class FeatureFlags(
         key = "feature.roomdirectorysearch",
         title = "Room directory search",
         description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     ShowBlockedUsersDetails(
@@ -56,7 +56,7 @@ enum class FeatureFlags(
         key = "feature.knock",
         title = "Ask to join",
         description = "Allow creating rooms which users can request access to.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     PrintLogsToLogcat(
@@ -73,7 +73,7 @@ enum class FeatureFlags(
         key = "feature.selectable_media_quality",
         title = "Select media quality per upload",
         description = "You can select the media quality for each attachment you upload.",
-        defaultValue = { false },
+        defaultValue = { true },
         // False so it's displayed in the developer options screen
         isFinished = false,
     ),
@@ -90,7 +90,7 @@ enum class FeatureFlags(
         title = "Multi accounts",
         description = "Allow the application to connect to multiple accounts at the same time." +
             "\n\nWARNING: this feature is EXPERIMENTAL and UNSTABLE.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     QrCodeLogin(
@@ -111,7 +111,7 @@ enum class FeatureFlags(
         key = "feature.allow_black_theme",
         title = "Allow black theme",
         description = "Allow selecting the black appearance theme for battery saving on OLED.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     LiveLocationSharing(
@@ -133,21 +133,21 @@ enum class FeatureFlags(
         key = "feature.floating_date_badge",
         title = "Display sticky date headers in the timeline",
         description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     SlashCommand(
         key = "feature.slash_command",
         title = "Parse slash commands in the message composer",
         description = "Allow parsing slash commands in the message composer and perform action.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     RoomThreadList(
         key = "feature.room_thread_list",
         title = "Add a list of threads in a room",
         description = "Add a new screen with a list of threads in a room.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     AutomaticBackPagination(
@@ -156,6 +156,13 @@ enum class FeatureFlags(
         description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
             "\nRequires an app restart to take effect.",
         defaultValue = { false },
+        isFinished = false,
+    ),
+    CustomTextEmoji(
+        key = "feature.custom_text_emoji",
+        title = "Custom text emoji",
+        description = "Allow defining custom text shortcuts that expand to emoji or text in the composer.",
+        defaultValue = { true },
         isFinished = false,
     ),
 }

@@ -71,6 +71,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 @Composable
 fun AdvancedSettingsView(
     state: AdvancedSettingsState,
+    onOpenCustomEmoji: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -132,6 +133,23 @@ fun AdvancedSettingsView(
                 )
             },
         )
+        if (state.customTextEmojiEnabled) {
+            ListItem(
+                headlineContent = {
+                    Text(text = stringResource(id = R.string.screen_advanced_settings_custom_emoji))
+                },
+                supportingContent = {
+                    Text(text = stringResource(id = R.string.screen_advanced_settings_custom_emoji_description))
+                },
+                leadingContent = {
+                    Icon(
+                        imageVector = CompoundIcons.Reaction(),
+                        contentDescription = null,
+                    )
+                },
+                onClick = onOpenCustomEmoji
+            )
+        }
         ListItem(
             headlineContent = {
                 Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence))
@@ -535,6 +553,7 @@ internal fun AdvancedSettingsViewBlackPreview(@PreviewParameter(AdvancedSettings
 private fun ContentToPreview(state: AdvancedSettingsState) {
     AdvancedSettingsView(
         state = state,
+        onOpenCustomEmoji = {},
         onBackClick = { }
     )
 }

@@ -58,6 +58,10 @@ class AdvancedSettingsPresenter(
         val connectionLightSecondaryColor by remember { appPreferencesStore.getConnectionLightSecondaryColorFlow() }.collectAsState(initial = 0xFFF0F4FF.toInt())
         val connectionLightGradientEnabled by remember { appPreferencesStore.isConnectionLightGradientEnabledFlow() }.collectAsState(initial = false)
 
+        val customTextEmojiEnabled by produceState(initialValue = false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.CustomTextEmoji)
+        }
+
         val themeOption by remember {
             derivedStateOf {
                 when (theme.value) {
@@ -148,6 +152,7 @@ class AdvancedSettingsPresenter(
                 gradientEnabled = connectionLightGradientEnabled,
             ),
             mediaPreviewConfigState = mediaPreviewConfigState,
+            customTextEmojiEnabled = customTextEmojiEnabled,
             eventSink = ::handleEvent,
         )
     }

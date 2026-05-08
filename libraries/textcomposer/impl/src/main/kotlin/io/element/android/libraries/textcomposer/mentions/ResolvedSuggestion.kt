@@ -37,4 +37,9 @@ sealed interface ResolvedSuggestion {
     data class Command(
         val command: SlashCommandSuggestion,
     ) : ResolvedSuggestion
+
+    data class CustomEmoji(
+        val shortcode: String,
+        val displayText: String,
+    ) : ResolvedSuggestion
 }

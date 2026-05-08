@@ -85,6 +85,14 @@ class MarkdownTextEditorState(
                 val length = resolvedSuggestion.command.command.length + 1
                 selection = IntRange(length, length)
             }
+            is ResolvedSuggestion.CustomEmoji -> {
+                val currentText = SpannableStringBuilder(text.value())
+                val replacement = "${resolvedSuggestion.displayText} "
+                currentText.replace(suggestion.start, suggestion.end, replacement)
+                val end = suggestion.start + replacement.length
+                text.update(currentText, true)
+                selection = IntRange(end, end)
+            }
         }
     }
 

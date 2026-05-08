@@ -66,6 +66,7 @@ fun SuggestionsPickerView(
                     is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
                     is ResolvedSuggestion.Alias -> suggestion.roomId.value
                     is ResolvedSuggestion.Command -> suggestion.command.command
+                    is ResolvedSuggestion.CustomEmoji -> suggestion.shortcode
                 }
             }
         ) {
@@ -103,24 +104,28 @@ private fun SuggestionItemView(
             is ResolvedSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
             is ResolvedSuggestion.Member -> suggestion.roomMember.getAvatarData(avatarSize)
             is ResolvedSuggestion.Alias -> suggestion.getAvatarData(avatarSize)
-            is ResolvedSuggestion.Command -> null
+            is ResolvedSuggestion.Command,
+            is ResolvedSuggestion.CustomEmoji -> null
         }
         val avatarType = when (suggestion) {
             is ResolvedSuggestion.Alias -> Room()
             ResolvedSuggestion.AtRoom,
             is ResolvedSuggestion.Member -> AvatarType.User
-            is ResolvedSuggestion.Command -> null
+            is ResolvedSuggestion.Command,
+            is ResolvedSuggestion.CustomEmoji -> null
         }
         val title = when (suggestion) {
             is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
             is ResolvedSuggestion.Member -> suggestion.roomMember.displayName
             is ResolvedSuggestion.Alias -> suggestion.roomName
             is ResolvedSuggestion.Command -> suggestion.command.command
+            is ResolvedSuggestion.CustomEmoji -> ":${suggestion.shortcode}:"
         }
         val details = when (suggestion) {
             is ResolvedSuggestion.AtRoom,
             is ResolvedSuggestion.Member,
-            is ResolvedSuggestion.Alias -> null
+            is ResolvedSuggestion.Alias,
+            is ResolvedSuggestion.CustomEmoji -> null
             is ResolvedSuggestion.Command -> suggestion.command.parameters
         }
         val subtitle = when (suggestion) {
@@ -128,6 +133,7 @@ private fun SuggestionItemView(
             is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
             is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
             is ResolvedSuggestion.Command -> suggestion.command.description
+            is ResolvedSuggestion.CustomEmoji -> suggestion.displayText
         }
         if (avatarData != null && avatarType != null) {
             Avatar(

@@ -57,6 +57,7 @@ fun CustomReactionBottomSheet(
                 EmojiPickerPresenter(
                     emojibaseStore = target.emojibaseStore,
                     recentEmojis = state.recentEmojis,
+                    customEmojis = state.customEmojis,
                     coroutineDispatchers = CoroutineDispatchers.Default,
                 )
             }

@@ -10,4 +10,16 @@
     <string name="screen_advanced_settings_connection_light_color_amber">Amber</string>
     <string name="screen_advanced_settings_connection_light_color_lavender">Lavender</string>
     <string name="screen_advanced_settings_connection_light_color_rose">Rose</string>
+
+    <string name="screen_advanced_settings_custom_emoji">Custom emoji</string>
+    <string name="screen_advanced_settings_custom_emoji_description">Manage your text-based custom emoji</string>
+    <string name="screen_custom_emoji_title">Custom Emoji</string>
+    <string name="screen_custom_emoji_empty">You haven\'t added any custom emojis yet.</string>
+    <string name="screen_custom_emoji_add_title">Add Custom Emoji</string>
+    <string name="screen_custom_emoji_delete_confirmation">Delete this custom emoji?</string>
+    <string name="screen_custom_emoji_edit_title">Edit Custom Emoji</string>
+    <string name="screen_custom_emoji_shortcode_label">Shortcode</string>
+    <string name="screen_custom_emoji_shortcode_hint">e.g. hello</string>
+    <string name="screen_custom_emoji_display_text_label">Display text</string>
+    <string name="screen_custom_emoji_display_text_hint">e.g. 👋</string>
 </resources>

@@ -26,6 +26,7 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
+import io.element.android.libraries.preferences.api.store.CustomTextEmoji
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
@@ -35,6 +36,7 @@ import kotlin.time.Duration.Companion.milliseconds
 class EmojiPickerPresenter(
     private val emojibaseStore: EmojibaseStore,
     private val recentEmojis: ImmutableList<String>,
+    private val customEmojis: ImmutableList<CustomTextEmoji>,
     private val coroutineDispatchers: CoroutineDispatchers,
 ) : Presenter<EmojiPickerState> {
     @Composable
@@ -52,7 +54,7 @@ class EmojiPickerPresenter(
                     emojis = emojis
                 )
             }
-            if (recentEmojis.isNotEmpty()) {
+            val categoriesWithRecent = if (recentEmojis.isNotEmpty()) {
                 val recentEmojis = recentEmojis.mapNotNull { recentEmoji ->
                     emojibaseStore.allEmojis.find { it.unicode == recentEmoji }
                 }.toImmutableList()
@@ -62,9 +64,30 @@ class EmojiPickerPresenter(
                         icon = IconSource.Vector(recentEmojiIcon),
                         emojis = recentEmojis
                     )
-                (listOf(recentCategory) + providedCategories).toImmutableList()
+                listOf(recentCategory) + providedCategories
             } else {
-                providedCategories.toImmutableList()
+                providedCategories
+            }
+            if (customEmojis.isNotEmpty()) {
+                val customCategory = EmojiCategory(
+                    titleId = R.string.emoji_picker_category_custom,
+                    icon = IconSource.Vector(CompoundIcons.Reaction()),
+                    emojis = customEmojis.map { customEmoji ->
+                        Emoji(
+                            hexcode = customEmoji.shortcode,
+                            label = customEmoji.shortcode,
+                            url = null,
+                            unicode = customEmoji.displayText,
+                            tags = null,
+                            shortcodes = listOf(customEmoji.shortcode),
+                            emoticon = null,
+                            skins = null
+                        )
+                    }.toImmutableList()
+                )
+                (listOf(customCategory) + categoriesWithRecent).toImmutableList()
+            } else {
+                categoriesWithRecent.toImmutableList()
             }
         }
 

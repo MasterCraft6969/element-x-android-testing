@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(projects.libraries.matrix.api)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.collections.immutable)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.preferences.test)

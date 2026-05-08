@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.preferences.api.store.CustomTextEmoji
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
@@ -17,6 +18,7 @@ data class CustomReactionState(
     val target: Target,
     val selectedEmoji: ImmutableSet<String>,
     val recentEmojis: ImmutableList<String>,
+    val customEmojis: ImmutableList<CustomTextEmoji>,
     val eventSink: (CustomReactionEvent) -> Unit,
 ) {
     sealed interface Target {

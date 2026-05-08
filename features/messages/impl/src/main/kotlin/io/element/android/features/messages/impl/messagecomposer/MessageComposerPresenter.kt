@@ -358,6 +358,9 @@ class MessageComposerPresenter(
                                 is ResolvedSuggestion.Command -> {
                                     richTextEditorState.replaceSuggestion(suggestion.command.command)
                                 }
+                                is ResolvedSuggestion.CustomEmoji -> {
+                                    richTextEditorState.replaceSuggestion(suggestion.displayText)
+                                }
                             }
                         } else if (markdownTextEditorState.currentSuggestion != null) {
                             markdownTextEditorState.insertSuggestion(

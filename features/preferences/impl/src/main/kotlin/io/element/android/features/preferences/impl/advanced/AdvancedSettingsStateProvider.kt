@@ -62,5 +62,6 @@ fun aAdvancedSettingsState(
         setTimelineMediaPreviewAction = setTimelineMediaPreviewAction,
         setHideInviteAvatarsAction = setHideInviteAvatarsAction
     ),
+    customTextEmojiEnabled = true,
     eventSink = eventSink
 )

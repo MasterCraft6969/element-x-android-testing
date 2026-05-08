@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.slashcommands.api.SlashCommandService
+import io.element.android.libraries.preferences.api.store.CustomTextEmojiStore
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -26,6 +27,7 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
 @Inject
 class SuggestionsProcessor(
     private val slashCommandService: SlashCommandService,
+    private val customTextEmojiStore: CustomTextEmojiStore,
 ) {
     /**
      *  Process the suggestion.
@@ -84,10 +86,25 @@ class SuggestionsProcessor(
                     emptyList()
                 }
             }
-            SuggestionType.Emoji,
-            is SuggestionType.Custom -> {
+            SuggestionType.Emoji -> {
                 // Clear suggestions
                 emptyList()
+            }
+            is SuggestionType.Custom -> {
+                if (suggestion.pattern == ":") {
+                    val query = suggestion.text
+                    val customEmojis = kotlinx.coroutines.flow.first(customTextEmojiStore.getCustomEmojis())
+                    customEmojis.filter {
+                        it.shortcode.contains(query, ignoreCase = true)
+                    }.map {
+                        ResolvedSuggestion.CustomEmoji(
+                            shortcode = it.shortcode,
+                            displayText = it.displayText
+                        )
+                    }
+                } else {
+                    emptyList()
+                }
             }
         }
     }

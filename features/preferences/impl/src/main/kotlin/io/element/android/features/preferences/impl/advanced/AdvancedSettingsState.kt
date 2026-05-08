@@ -24,6 +24,7 @@ data class AdvancedSettingsState(
     val availableThemeOptions: ImmutableList<ThemeOption>,
     val connectionLightSettings: ConnectionLightSettings,
     val mediaPreviewConfigState: MediaPreviewConfigState,
+    val customTextEmojiEnabled: Boolean,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
 

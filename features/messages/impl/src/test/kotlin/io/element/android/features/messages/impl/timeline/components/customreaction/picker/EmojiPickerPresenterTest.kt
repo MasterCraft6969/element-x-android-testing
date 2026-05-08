@@ -96,6 +96,7 @@ class EmojiPickerPresenterTest {
     ) = EmojiPickerPresenter(
         emojibaseStore = EmojibaseStore(categories.toMap().toImmutableMap()),
         recentEmojis = recentEmojis,
+        customEmojis = persistentListOf(),
         coroutineDispatchers = testCoroutineDispatchers(),
     )
 

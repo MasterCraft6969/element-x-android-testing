@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.preferences.api.store.CustomTextEmojiStore
 import io.element.android.libraries.recentemojis.api.EmojibaseProvider
 import io.element.android.libraries.recentemojis.api.GetRecentEmojis
 import kotlinx.collections.immutable.ImmutableList
@@ -29,11 +30,13 @@ import kotlinx.coroutines.launch
 class CustomReactionPresenter(
     private val emojibaseProvider: EmojibaseProvider,
     private val getRecentEmojis: GetRecentEmojis,
+    private val customTextEmojiStore: CustomTextEmojiStore,
 ) : Presenter<CustomReactionState> {
     @Composable
     override fun present(): CustomReactionState {
         val localCoroutineScope = rememberCoroutineScope()
         var recentEmojis by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
+        val customEmojis by customTextEmojiStore.getCustomEmojis().collectAsState(initial = persistentListOf())
 
         val target: MutableState<CustomReactionState.Target> = remember {
             mutableStateOf(CustomReactionState.Target.None)
@@ -72,6 +75,7 @@ class CustomReactionPresenter(
             target = target.value,
             selectedEmoji = selectedEmoji,
             recentEmojis = recentEmojis,
+            customEmojis = customEmojis,
             eventSink = ::handleEvent,
         )
     }

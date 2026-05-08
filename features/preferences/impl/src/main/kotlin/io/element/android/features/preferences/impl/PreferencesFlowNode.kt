@@ -35,6 +35,7 @@ import io.element.android.features.preferences.impl.notifications.NotificationSe
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
+import io.element.android.features.preferences.impl.customemoji.CustomEmojiNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
@@ -76,6 +77,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object AdvancedSettings : NavTarget
+
+        @Parcelize
+        data object CustomEmoji : NavTarget
 
         @Parcelize
         data object Labs : NavTarget
@@ -280,7 +284,15 @@ class PreferencesFlowNode(
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
             }
             NavTarget.AdvancedSettings -> {
-                createNode<AdvancedSettingsNode>(buildContext)
+                val callback = object : AdvancedSettingsNode.Callback {
+                    override fun navigateToCustomEmoji() {
+                        backstack.push(NavTarget.CustomEmoji)
+                    }
+                }
+                createNode<AdvancedSettingsNode>(buildContext, listOf(callback))
+            }
+            NavTarget.CustomEmoji -> {
+                createNode<CustomEmojiNode>(buildContext)
             }
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
