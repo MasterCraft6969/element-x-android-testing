@@ -20,6 +20,7 @@ import io.element.android.libraries.preferences.api.store.CustomTextEmojiStore
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
+import kotlinx.coroutines.flow.first
 
 /**
  * This class is responsible for processing suggestions when `@`, `/` or `#` are type in the composer.
@@ -93,7 +94,7 @@ class SuggestionsProcessor(
             is SuggestionType.Custom -> {
                 if (suggestion.pattern == ":") {
                     val query = suggestion.text
-                    val customEmojis = kotlinx.coroutines.flow.first(customTextEmojiStore.getCustomEmojis())
+                    val customEmojis = customTextEmojiStore.getCustomEmojis().first()
                     customEmojis.filter {
                         it.shortcode.contains(query, ignoreCase = true)
                     }.map {

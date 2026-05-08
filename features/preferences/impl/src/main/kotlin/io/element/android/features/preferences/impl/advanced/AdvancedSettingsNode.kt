@@ -29,7 +29,7 @@ class AdvancedSettingsNode(
         fun navigateToCustomEmoji()
     }
 
-    private val callback = plugins<Callback>().firstOrNull()
+    private val callback = plugins.filterIsInstance<Callback>().firstOrNull()
 
     @Composable
     override fun View(modifier: Modifier) {
