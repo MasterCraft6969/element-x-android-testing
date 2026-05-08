@@ -21,9 +21,11 @@ setupDependencyInjection()
 dependencies {
     api(projects.libraries.preferences.api)
     implementation(libs.androidx.datastore.preferences)
+    implementation(libs.kotlinx.collections.immutable) 
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.di)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.sessionStorage.api)
+    implementation(libs.javax.inject)
 }

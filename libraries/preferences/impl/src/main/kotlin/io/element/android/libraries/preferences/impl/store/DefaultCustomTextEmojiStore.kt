@@ -3,6 +3,7 @@
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
+ *
  */
 
 package io.element.android.libraries.preferences.impl.store
@@ -27,6 +28,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.File
 import javax.inject.Inject
+import java.io.File
 
 @ContributesBinding(SessionScope::class)
 class DefaultCustomTextEmojiStore @Inject constructor(
