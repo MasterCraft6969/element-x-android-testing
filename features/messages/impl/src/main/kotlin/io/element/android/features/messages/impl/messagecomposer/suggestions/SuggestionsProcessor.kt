@@ -92,8 +92,9 @@ class SuggestionsProcessor(
                 emptyList()
             }
             is SuggestionType.Custom -> {
-                if (suggestion.pattern == ":") {
-                    val query = suggestion.text
+                val customType = suggestion?.type as? SuggestionType.Custom
+                if (customType?.pattern == ":") {
+                    val query = suggestion?.text ?: ""
                     val customEmojis = customTextEmojiStore.getCustomEmojis().first()
                     customEmojis.filter {
                         it.shortcode.contains(query, ignoreCase = true)

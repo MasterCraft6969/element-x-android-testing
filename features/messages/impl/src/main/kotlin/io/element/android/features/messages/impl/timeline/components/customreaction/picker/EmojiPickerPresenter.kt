@@ -46,6 +46,7 @@ class EmojiPickerPresenter(
         var emojiResults by remember { mutableStateOf<SearchBarResultState<ImmutableList<Emoji>>>(SearchBarResultState.Initial()) }
 
         val recentEmojiIcon = CompoundIcons.History()
+        val customEmojiIcon = CompoundIcons.Reaction()
         val categories = remember {
             val providedCategories = emojibaseStore.categories.map { (category, emojis) ->
                 EmojiCategory(
@@ -71,16 +72,14 @@ class EmojiPickerPresenter(
             if (customEmojis.isNotEmpty()) {
                 val customCategory = EmojiCategory(
                     titleId = R.string.emoji_picker_category_custom,
-                    icon = IconSource.Vector(CompoundIcons.Reaction()),
+                    icon = IconSource.Vector(customEmojiIcon),
                     emojis = customEmojis.map { customEmoji ->
                         Emoji(
                             hexcode = customEmoji.shortcode,
                             label = customEmoji.shortcode,
-                            url = null,
                             unicode = customEmoji.displayText,
                             tags = null,
-                            shortcodes = listOf(customEmoji.shortcode),
-                            emoticon = null,
+                            shortcodes = listOf(customEmoji.shortcode).toImmutableList(),
                             skins = null
                         )
                     }.toImmutableList()

@@ -19,7 +19,7 @@ import io.element.android.libraries.preferences.api.store.CustomTextEmoji
 import io.element.android.libraries.preferences.api.store.CustomTextEmojiStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import dev.zacsweers.metro.Inject
 
 class CustomEmojiPresenter @Inject constructor(
     private val customTextEmojiStore: CustomTextEmojiStore,

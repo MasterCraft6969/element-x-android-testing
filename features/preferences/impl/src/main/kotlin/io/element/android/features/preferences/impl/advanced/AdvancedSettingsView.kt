@@ -141,7 +141,7 @@ fun AdvancedSettingsView(
                 supportingContent = {
                     Text(text = stringResource(id = R.string.screen_advanced_settings_custom_emoji_description))
                 },
-                leadingContent = {
+                leadingContent = ListItemContent.Custom {
                     Icon(
                         imageVector = CompoundIcons.Reaction(),
                         contentDescription = null,

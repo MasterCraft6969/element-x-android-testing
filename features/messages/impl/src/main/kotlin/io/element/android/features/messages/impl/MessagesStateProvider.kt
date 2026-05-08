@@ -55,6 +55,7 @@ import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
+import io.element.android.libraries.preferences.api.store.CustomTextEmoji
 
 open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
@@ -190,10 +191,12 @@ fun aReactionSummaryState(
 fun aCustomReactionState(
     target: CustomReactionState.Target = CustomReactionState.Target.None,
     recentEmojis: ImmutableList<String> = persistentListOf(),
+    customEmojis: ImmutableList<CustomTextEmoji> = persistentListOf(),
     eventSink: (CustomReactionEvent) -> Unit = {},
 ) = CustomReactionState(
     target = target,
     recentEmojis = recentEmojis,
+    customEmojis = customEmojis,
     selectedEmoji = persistentSetOf(),
     eventSink = eventSink,
 )

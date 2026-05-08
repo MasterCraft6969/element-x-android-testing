@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.preferences.api.store.CustomTextEmoji
 
 @Composable
@@ -120,7 +121,7 @@ private fun CustomEmojiItem(
     ListItem(
         headlineContent = { Text(":${emoji.shortcode}:") },
         supportingContent = { Text(emoji.displayText) },
-        trailingContent = {
+        trailingContent = ListItemContent.Custom {
             IconButton(onClick = { onDelete(emoji) }) {
                 Icon(Icons.Filled.Delete, contentDescription = stringResource(id = R.string.screen_custom_emoji_delete_confirmation))
             }
