@@ -28,7 +28,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.io.File
 import javax.inject.Inject
-import java.io.File
 
 @ContributesBinding(SessionScope::class)
 class DefaultCustomTextEmojiStore @Inject constructor(
