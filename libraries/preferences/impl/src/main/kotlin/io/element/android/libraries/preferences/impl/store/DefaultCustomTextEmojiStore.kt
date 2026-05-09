@@ -17,6 +17,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.CustomTextEmoji
@@ -31,7 +32,7 @@ import javax.inject.Inject
 
 @ContributesBinding(SessionScope::class)
 class DefaultCustomTextEmojiStore @Inject constructor(
-    context: Context,
+    @ApplicationContext context: Context,
     sessionId: SessionId,
     @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : CustomTextEmojiStore {

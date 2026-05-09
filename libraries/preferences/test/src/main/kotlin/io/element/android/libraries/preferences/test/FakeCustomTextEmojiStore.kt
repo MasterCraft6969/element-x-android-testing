@@ -13,25 +13,14 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 
 class FakeCustomTextEmojiStore : CustomTextEmojiStore {
     private val emojis = MutableStateFlow<List<CustomTextEmoji>>(emptyList())
 
     override fun getCustomEmojis(): Flow<ImmutableList<CustomTextEmoji>> {
-        val mapped = MutableStateFlow<ImmutableList<CustomTextEmoji>>(kotlinx.collections.immutable.persistentListOf())
-        // Since we can't easily map a StateFlow to a StateFlow without a coroutine scope,
-        // this is a simplified fake that works by returning a flow that updates when the source updates.
-        return kotlinx.coroutines.flow.map { list -> list.toImmutableList() }.apply {
-            // Setup flow transformation
-            emojis
-        }.let {
-            kotlinx.coroutines.flow.flow {
-                emojis.collect { list ->
-                    emit(list.toImmutableList())
-                }
-            }
-        }
+        return emojis.map { list -> list.toImmutableList() }
     }
 
     override suspend fun addCustomEmoji(emoji: CustomTextEmoji) {
